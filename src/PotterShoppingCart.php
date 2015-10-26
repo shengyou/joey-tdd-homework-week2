@@ -2,43 +2,65 @@
 
 namespace App;
 
+use Illuminate\Support\Collection;
+
 class PotterShoppingCart
 {
-    protected $books = [];
-    protected $discountTable = [
-        2 => 0.95,
-        3 => 0.9,
-        4 => 0.8,
-        5 => 0.75,
-    ];
+    /* @var \Illuminate\Support\Collection */
+    protected $books;
+
+    public function __construct()
+    {
+        $this->books = new Collection();
+    }
 
     public function add(Book $book)
     {
-        $this->books[] = $book;
+        $this->books->push($book);
 
         return $this;
     }
 
     public function checkout()
     {
-        $totalPrice = 0;
+        $groupBookByTitle = $this->books->groupBy(function($item) {
+            /* @var $item \App\Book */
+            return $item->getTitle();
+        });
 
-        foreach($this->books as $book) {
-            /* @var $book \App\Book */
-            $totalPrice += $book->getPrice();
+        $basePrice = 0;
+        $extraPrice = 0;
+        $discount = $this->calculateDiscount($groupBookByTitle->count());
+
+        foreach($groupBookByTitle as $group) {
+            foreach($group as $index => $book) {
+                /* @var $book \App\Book */
+                if ($index == 0) {
+                    $basePrice += $book->getPrice();
+                } else {
+                    $extraPrice += $book->getPrice();
+                }
+            }
         }
 
-        return $totalPrice * $this->calculateDiscount();
+        $totalPrice = $basePrice * $discount + $extraPrice;
+
+        return $totalPrice;
     }
 
-    private function calculateDiscount()
+    private function calculateDiscount($count)
     {
-        $count = count($this->books);
+        $discountTable = [
+            2 => 0.95,
+            3 => 0.9,
+            4 => 0.8,
+            5 => 0.75,
+        ];
 
-        if (!array_key_exists($count, $this->discountTable)) {
+        if (!array_key_exists($count, $discountTable)) {
             return 1;
         }
 
-        return $this->discountTable[$count];
+        return $discountTable[$count];
     }
 }
