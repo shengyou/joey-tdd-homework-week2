@@ -21,6 +21,9 @@ class PotterShoppingCartTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    /**
+     * 第一集買了一本，第二集也買了一本，價格應為 100 * 2 * 0.95 = 190
+     */
     public function testBuy1EpisodeOneAnd1EpisodeTwoThenShouldPay190()
     {
         // Arrange
@@ -36,6 +39,9 @@ class PotterShoppingCartTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    /**
+     * 一二三集各買了一本，價格應為 100 * 3 * 0.9 = 270
+     */
     public function testBuy1EpisodeOneAnd1EpisodeTwoAnd1EpisodeThreeThenShouldPay270()
     {
         // Arrange
@@ -52,6 +58,9 @@ class PotterShoppingCartTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    /**
+     * 一二三四集各買了一本，價格應為 100 * 4 * 0.8 = 320
+     */
     public function testBuyEpisodeOneToEpisodeFourThenShouldPay320()
     {
         // Arrange
@@ -69,6 +78,9 @@ class PotterShoppingCartTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    /**
+     * 一次買了整套，一二三四五集各買了一本，價格應為 100 * 5 * 0.75 = 375
+     */
     public function testBuyEachOfEpisodesThenShouldPay375()
     {
         // Arrange
@@ -87,6 +99,9 @@ class PotterShoppingCartTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    /**
+     * 一二集各買了一本，第三集買了兩本，價格應為 100 * 3 * 0.9 + 100 = 370
+     */
     public function testBuy1EpisodeOneAnd1EpisodeTwoAnd2EpisodeThreeThenShouldPay370()
     {
         // Arrange
@@ -104,6 +119,9 @@ class PotterShoppingCartTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    /**
+     * 第一集買了一本，第二三集各買了兩本，價格應為 100 * 3 * 0.9 + 100 * 2 * 0.95 = 460
+     */
     public function testBuy1EpisodeOneAnd2EpisodeTwoAndThreeThenShouldPay460()
     {
         // Arrange
