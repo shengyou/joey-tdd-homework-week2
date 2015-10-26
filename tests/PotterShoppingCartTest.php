@@ -86,4 +86,21 @@ class PotterShoppingCartTest extends \PHPUnit_Framework_TestCase
         // Assert
         $this->assertEquals($expected, $actual);
     }
+    
+    public function testBuy1EpisodeOneAnd1EpisodeTwoAnd2EpisodeThreeThenShouldPay370()
+    {
+        // Arrange
+        $target = new PotterShoppingCart();
+
+        // Act
+        $expected = 370;
+        $actual = $target->add(new Book('哈利波特第一集', 100))
+                         ->add(new Book('哈利波特第二集', 100))
+                         ->add(new Book('哈利波特第三集', 100))
+                         ->add(new Book('哈利波特第三集', 100))
+                         ->checkout();
+
+        // Assert
+        $this->assertEquals($expected, $actual);
+    }
 }
