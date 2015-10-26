@@ -25,6 +25,8 @@ class PotterShoppingCart
         $discountPercentage = 1.0;
         if (count($this->books) == 2) {
             $discountPercentage = 0.95;
+        } else if  (count($this->books) == 3) {
+            $discountPercentage = 0.9;
         }
 
         return $totalPrice * $discountPercentage;
