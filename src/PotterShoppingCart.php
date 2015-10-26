@@ -5,6 +5,12 @@ namespace App;
 class PotterShoppingCart
 {
     protected $books = [];
+    protected $discountTable = [
+        2 => 0.95,
+        3 => 0.9,
+        4 => 0.8,
+        5 => 0.75,
+    ];
 
     public function add(Book $book)
     {
@@ -22,15 +28,17 @@ class PotterShoppingCart
             $totalPrice += $book->getPrice();
         }
 
-        $discountPercentage = 1.0;
-        if (count($this->books) == 2) {
-            $discountPercentage = 0.95;
-        } else if  (count($this->books) == 3) {
-            $discountPercentage = 0.9;
-        } else if  (count($this->books) == 4) {
-            $discountPercentage = 0.8;
+        return $totalPrice * $this->calculateDiscount();
+    }
+
+    private function calculateDiscount()
+    {
+        $count = count($this->books);
+
+        if (!array_key_exists($count, $this->discountTable)) {
+            return 1;
         }
 
-        return $totalPrice * $discountPercentage;
+        return $this->discountTable[$count];
     }
 }
