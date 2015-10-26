@@ -11,7 +11,7 @@ class PotterShoppingCart
 
     public function __construct()
     {
-        $this->books = new Collection();
+        $this->books = collect();
     }
 
     public function add(Book $book)
@@ -23,27 +23,30 @@ class PotterShoppingCart
 
     public function checkout()
     {
-        $groupBookByTitle = $this->books->groupBy(function($item) {
-            /* @var $item \App\Book */
+        $groupBooksByTitle = $this->books->groupBy(function($item) {
+            /* @var $item Book */
             return $item->getTitle();
         });
 
-        $basePrice = 0;
-        $extraPrice = 0;
-        $discount = $this->calculateDiscount($groupBookByTitle->count());
+        $groupBooksByDiff = [];
 
-        foreach($groupBookByTitle as $group) {
+        foreach($groupBooksByTitle as $group) {
             foreach($group as $index => $book) {
-                /* @var $book \App\Book */
-                if ($index == 0) {
-                    $basePrice += $book->getPrice();
-                } else {
-                    $extraPrice += $book->getPrice();
-                }
+                $groupBooksByDiff[$index][] = $book;
             }
         }
 
-        $totalPrice = $basePrice * $discount + $extraPrice;
+        $totalPrice = 0;
+        foreach($groupBooksByDiff as $group) {
+            /* @var $group Collection */
+            $partialPrice = 0;
+            foreach($group as $book) {
+                /* @var $book Book */
+                $partialPrice += $book->getPrice();
+            }
+
+            $totalPrice += $partialPrice * $this->calculateDiscount(count($group));
+        }
 
         return $totalPrice;
     }
