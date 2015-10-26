@@ -22,6 +22,11 @@ class PotterShoppingCart
             $totalPrice += $book->getPrice();
         }
 
-        return $totalPrice;
+        $discountPercentage = 1.0;
+        if (count($this->books) == 2) {
+            $discountPercentage = 0.95;
+        }
+
+        return $totalPrice * $discountPercentage;
     }
 }
